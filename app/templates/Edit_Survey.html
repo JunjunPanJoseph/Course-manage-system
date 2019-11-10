@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Edit Survey{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <li><a href="/Survey_Pool">Back</a></li>
+</div>
+
+
+
+{% if form %}
+<h1>Edit Survey  {{ form.name.data }}</h1>
+<h2>***CHANGE IN QUESTION LIST WILL RESET ANSWER***</h2>
+{{ wtf.quick_form(form) }}
+{%else%}
+    <h1>Can not find Survey in Survey pool!</h1>
+{% endif %}
+{% endblock %}

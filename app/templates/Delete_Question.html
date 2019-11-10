@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Delete Question{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <li><a href="/Question_Pool">Back</a></li>
+</div>
+
+
+
+{% if form %}
+<h1>Delete Question{{ name }}</h1>
+<h2>Are you sure you want to delete question: {{ name }}?</h2>
+{{ wtf.quick_form(form) }}
+{%else%}
+    <h1>Can not find question in question pool!</h1>
+{% endif %}
+{% endblock %}

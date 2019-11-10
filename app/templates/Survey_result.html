@@ -1,0 +1,188 @@
+{%if a1 == "ADMIN"%}
+{% extends "base.html" %}
+{%endif%}
+{%if a1 == "STAFF"%}
+{% extends "base_staff.html" %}
+{%endif%}
+{%if a1 == "STUDENT"%}
+{% extends "base_student.html" %}
+{%endif%}
+<script src="Chart.js"></script>
+{% block title %}Survey_result{% endblock %}
+
+{% block content %}
+<script>
+function isHidden(oDiv){
+  var vDiv = document.getElementById(oDiv);
+  vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+}
+</script>
+<div class = "container">
+    <div class = "page-header">
+        <h1>Survey Results</h1>
+    </div>
+</div>
+<div class = "container">
+
+    {% if survey %}
+    <!--<p>{{survey}}</p>-->
+    <h3>{{survey.Name}} for {{survey.Course_Semester[0:8]}} in {{survey.Course_Semester[9:]}}<span class="label label-primary">{{survey.Start_Time}} --- {{survey.End_Time}}</span></h3>
+
+    <div class="jumbotron">
+    <h4><span class="label label-primary">Attendence <span class="badge">{{survey.return_len()}}</span></span><h4>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Commit
+        </div>
+        <div class="panel-body">
+            {{survey.Commit}}
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Survey Text
+        </div>
+        <div class="panel-body">
+            {{survey.Description_Text}}
+        </div>
+    </div>
+    
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Questions
+        </div>
+    </div>
+
+        
+    {% for q in survey.Question_list %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>{{c.i+1}}.  {{q.Name}} <span class="badge">{{q.say_type()}}</span></h4>
+        </div>
+        <div class="panel-body">
+            <p>{{q.Description_Text}}</p>
+        </div>
+    </div>
+
+
+    </br>
+    {% if q.Type == "TEXT" %}
+    </br>
+    
+    
+    <div style="cursor:hand" onclick="isHidden('{{q.Name}}')"><b><p> Answer</p></b></div>
+    <div style="display:none" id='{{ q.Name }}'>
+        <div class="table-responsive">
+                <ul class="list-group">
+                
+                 <tbody>
+                {% for a in survey.Answer[c.i] %}
+                    <tr>
+                        <td>{{a}}</td>
+                    </tr>
+                {% endfor %}
+                 
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    {%else%}
+        <div style="cursor:hand" onclick="isHidden('{{q.Name}}')"><b><p>Answer</p></b></div>
+        <div style="display:none" id='{{ q.Name }}'>
+            <div class="table-responsive">
+                    <table class="table table-striped">
+                    
+                     <tbody>
+                        {{c2.reset()}}
+                        {% for o in q.Q_options %}
+                            <tr>
+                            <td>{{o}}</td> 
+                            <td>{{survey.Answer[c.i][c2.i]}}</td>
+                            {{c2.next()}}
+                            </tr>
+                        {% endfor %}
+                                     
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {%endif%}
+    </br>
+    {{c.next()}}
+    {% endfor %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Optional Questions
+        </div>
+    </div>
+    {% for q in survey.Optional_Question_list %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>{{c.i+1}}.  {{q.Name}} <span class="badge">{{q.say_type()}}</span></h4>
+        </div>
+        <div class="panel-body">
+            <p>{{q.Description_Text}}</p>
+        </div>
+    </div>
+    
+    {% if q.Type == "TEXT" %}
+    </br>
+
+    <div style="cursor:hand" onclick="isHidden('{{q.Name}}')"><b><p>Answer</p></b></div>
+    <div style="display:none" id='{{ q.Name }}'>
+
+        <div class="table-responsive">
+                <table class="table table-striped">
+                
+                 <tbody>
+                {% for a in survey.Answer[c.i] %}
+                    <tr>
+                        <td>{{a}}</td>
+                    </tr>
+                {% endfor %}
+                 
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
+    {%else%}
+        <div style="cursor:hand" onclick="isHidden('{{q.Name}}')"><b><p>Answer</p></b></div>
+        <div style="display:none" id='{{ q.Name }}'>
+            <div class="table-responsive">
+                    <table class="table table-striped">
+                    
+                    
+                     <tbody>
+                        {{c2.reset()}}
+                        {% for o in q.Q_options %}
+                            <tr>
+                            <td>{{o}}</td> 
+                            <td>{{survey.Answer[c.i][c2.i]}}</td>
+                            {{c2.next()}}
+                            </tr>
+                        {% endfor %}
+                                     
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {%endif%}
+    </br>
+    {{c.next()}}
+    {% endfor %}
+    
+    {% else %}
+      <p>nothing to display</p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

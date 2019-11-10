@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Create Survey{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Create Survey</h1>
+    <li><a href="/Survey_Pool">Back</a></li>
+</div>
+<div>
+{{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

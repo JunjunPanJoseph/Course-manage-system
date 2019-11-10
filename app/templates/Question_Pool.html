@@ -1,0 +1,132 @@
+{% if current_user.authority == "STAFF" %}
+{% extends "base_staff.html" %}
+{% else %}
+{% extends "base.html" %}
+{% endif %}
+{% block title %}Qusetion Pool{% endblock %}
+
+{% block content %}
+
+<div class = "container">
+    <div class = "page-header">
+        <h1>Question Pool</h1>
+        {% if a1 =="ADMIN" %}
+        <li><a href="/Question/Create/NORMAL">Create New Question</a></li>
+        {% endif %}
+        <li><a href="/Question/Create/OPTIONAL">Create New Optional Question</a></li>
+    </div>
+</div>
+<div class = "container">
+    <div class = "page-header">
+    
+    {% if current_user.authority == "ADMIN" %}
+        <div class="table-responsive">
+            <h2>All questions</h2>
+            <table class="table table-striped">
+                {% if questions %}
+                 <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Commit</th>
+                        <th>Detail</th>
+                        {% if a1=="ADMIN" %}
+                        <th>Edit</th>
+
+                        <th>Delete</th>
+                        {% endif %}
+                        </tr>
+                 </thead>
+                 <tbody>
+                {% for q in questions %}
+                    <tr>
+                        <td>{{ q.Name }}</td>
+                        <td>{{ q.say_type() }}</td>
+                        <td>{{ q.Commit }}</td>
+                        <td>                
+                            <div class = "dropdown">
+                                <span>Detail</span>
+                                <div class = "dropdown-content">
+                                    <li><h5>Question text: {{ q.Description_Text }}<p></li>
+                                    {% if q.Type ==  'TEXT'%}
+                                    {% else %}
+                                        <li><h5>Options:<p></li>
+                                        {% for c in q.Q_options %}
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ c }}</p>
+                                        {%endfor%}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        {% if a1=="ADMIN" %}
+                    <td><a href = "/Question/Edit/{{q.Name}}/NORMAL">Edit </a></td>
+                    
+
+                    <td><a href = "/Question/Delete/{{q.Name}}/NORMAL">Delete </a></td>
+                    {%endif%}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                {% else %}
+                <caption>No questions to show</caption>
+                {%endif%}
+            </table>
+        </div>
+        {% endif %}
+        
+        
+        <div class="table-responsive">
+            <h2>Optional questions</h2>
+            <table class="table table-striped">
+                {% if o_questions %}
+                 <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Commit</th>
+                        <th>Detail</th>
+                        {% if a1=="ADMIN" %}
+                        <th>Edit</th>
+
+                        <th>Delete</th>
+                        {% endif %}
+                        </tr>
+                 </thead>
+                 <tbody>
+                {% for q in o_questions %}
+                    <tr>
+                        <td>{{ q.Name }}</td>
+                        <td>{{ q.say_type() }}</td>
+                        <td>{{ q.Commit }}</td>
+                        <td>                
+                            <div class = "dropdown">
+                                <span>Detail</span>
+                                <div class = "dropdown-content">
+                                    <li><h5>Question text: {{ q.Description_Text }}<p></li>
+                                    {% if q.Type ==  'TEXT'%}
+                                    {% else %}
+                                        <li><h5>Options:<p></li>
+                                        {% for c in q.Q_options %}
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;{{ c }}</p>
+                                        {%endfor%}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        {% if a1=="ADMIN" %}
+                    <td><a href = "/Question/Edit/{{q.Name}}/OPTIONAL">Edit </a></td>
+                    
+
+                    <td><a href = "/Question/Delete/{{q.Name}}/OPTIONAL">Delete </a></td>
+                    {%endif%}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                {% else %}
+                <caption>No optional questions to show</caption>
+                {%endif%}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

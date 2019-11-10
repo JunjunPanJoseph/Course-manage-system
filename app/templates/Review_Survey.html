@@ -1,0 +1,129 @@
+{% if current_user.authority == "STAFF" %}
+{% extends "base_staff.html" %}
+{% else %}
+{% extends "base.html" %}
+{% endif %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Review Survey{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <li><a href="/Survey_Pool">Back</a></li>
+</div>
+
+
+
+{% if form and survey%}
+<h1>Review Survey</h1>
+ 
+ 
+    <!--<p>{{survey}}</p>-->
+    <h3>{{survey.Name}} for {{survey.Course_Semester[0:8]}} in {{survey.Course_Semester[9:]}}<span class="label label-primary">{{survey.Start_Time}} --- {{survey.End_Time}}</span></h3>
+
+    <div class="jumbotron">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Commit
+        </div>
+        <div class="panel-body">
+            {{survey.Commit}}
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Survey Text
+        </div>
+        <div class="panel-body">
+            {{survey.Description_Text}}
+        </div>
+    </div>
+ 
+<p>
+    Question list:
+    <br>
+    {%for x in survey.Question_list%}
+            <div class="list-group">
+                <li class="list-group-item active">
+                    <h4 class="list-group-item-heading">
+                        {{x.Name}}<span class="badge">{{x.Type}}</span>
+                    </h4>
+                </li>
+                <li class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        Question Text
+                    </h4>
+                    <p class="list-group-item-text">
+                        <div class = "well">{{x.Description_Text}}</div>
+                    </p>
+                </li>
+                {%if x.Type != "TEXT"%}
+                <li class="list-group-item">
+                    <h4 class="list-group-item-heading">Question list</h4>
+                    <p class="list-group-item-text">
+                    <div class = "well">
+                    <table class="table">
+                    <tr>
+                        {% for o in x.Q_options %}
+                        <th>{{o}}</th>
+                        {%endfor%}
+                    </tr>
+                    </table>
+                    </div>
+                    </p>
+                </li>
+                {%endif%}
+            </div>
+    {%endfor%}
+</p>
+<p>
+    Optional Questions:
+    <br>
+    {%for x in survey.Optional_Question_list%}
+
+            <div class="list-group">
+                <li class="list-group-item active">
+                    <h4 class="list-group-item-heading">
+                        {{x.Name}}<span class="badge">{{x.Type}}</span>
+                    </h4>
+                </li>
+                <li class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        Question Text
+                    </h4>
+                    <p class="list-group-item-text">
+                        <div class = "well">{{x.Description_Text}}</div>
+                    </p>
+                </li>
+                {%if x.Type != "TEXT"%}
+                <li class="list-group-item">
+                    <h4 class="list-group-item-heading">Question list</h4>
+                    <p class="list-group-item-text">
+                    <div class = "well">
+                    <table class="table">
+                    <tr>
+                        {% for o in x.Q_options %}
+                        <th>{{o}}</th>
+                        {%endfor%}
+                    </tr>
+                    </table>
+                    </div>
+                    </p>
+                </li>
+                {%endif%}
+            </div>
+    {%endfor%}
+</p>
+{%if survey.State == "NOT_REVIEWED"%}
+<h4>Add new optional questions: </h4>
+{{ wtf.quick_form(form) }}
+{% else %}
+<p>Survey state: {{ survey.State }}</p>
+{%endif%}
+</div>
+{%else%}
+    <h1>Can not find Survey in Survey pool!</h1>
+{% endif %}
+{% endblock %}

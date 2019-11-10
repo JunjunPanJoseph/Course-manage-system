@@ -1,0 +1,177 @@
+{% extends "base_student.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Hello，Student ID： {{ID}}{% endblock %}
+
+
+{% block content %}
+
+<script>
+function isHidden(oDiv){
+  var vDiv = document.getElementById(oDiv);
+  vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+}
+</script>
+
+<div class = "container">
+    <div class = "page-header">
+        <h1>Hello，ID： {{ID}}</h1>
+    </div>
+</div>
+<div class = "container">
+    <div class = "page-header">
+        {% if surveys %}
+            <h2>Course list</h2> 
+            {% for c in cl %}
+                <div style="cursor:hand" onclick="isHidden('{{c}}')"><b>{{c}}</b></div>
+                <div style="display:block" id='{{ c }}'>
+                    <div class="table-responsive">
+                            <table class="table table-striped">
+                            
+                             <thead>
+                                <tr>
+                                    <th>Name (click name to complete survey)</th>
+                                    <th>Status</th>
+                                    <th>Commit</th>
+                                    <th>Course</th>
+                                    <th>Semester</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    {%if current_user.authority == "STUDENT"%}
+                                    <th>View Result</th>
+                                    {% endif %}
+                                </tr>
+                             </thead>
+                             <tbody>
+                            {% for s in surveys %}
+                                {% if s.Course_Semester == c and s.survey_open(ID)==True%}
+                                    <tr>
+                                        <td>
+                                        {% if s.survey_open(ID) %}
+                                        <a href = "/Survey/display/{{s.Name}}">{{s.Name}} </a>
+                                        {%else%}
+                                        <p>{{s.Name}}</p>
+                                        {%endif%}
+                                        </td>
+                                        <td>
+                                        {% if s.survey_open(ID) %}
+                                        <p>Opened</p>
+                                        {%else%}
+                                        <p>Closed</p>
+                                        {%endif%}
+                                        </td>
+                                        <td>{{ s.Commit }}</td>
+                                        <td>{{ s.Course_Semester[0:8] }}</td>
+                                        <td>{{ s.Course_Semester[9:] }}</td>
+                                        <td>{{ s.Start_Time }}</td>
+                                        <td>{{ s.End_Time }}</td>
+                                        {% if current_user.authority == "STUDENT" %}
+                                        <td>
+                                        {%if s.survey_open() == False%}
+                                            {%if  s.State != "NOT_REVIEWED"%}
+                                                <a href = "/Public/result/{{s.Name}}">{{"Result"}} </a>
+                                            {%else%}
+                                            {{"Closed"}}
+                                            {%endif%}
+                                        {% else %}
+                                        {{"Closed"}}
+                                        {%endif%}
+                                        
+                                        </td>
+                                        {%endif%}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                             
+                            {% for s in surveys %}
+                                {% if s.Course_Semester == c and s.survey_open(ID)==False and current_user.authority == "STUDENT"%}
+                                    <tr>
+                                        <td>
+                                        {% if s.survey_open(ID) %}
+                                        <a href = "/Survey/display/{{s.Name}}">{{s.Name}} </a>
+                                        {%else%}
+                                        <p>{{s.Name}}</p>
+                                        {%endif%}
+                                        </td>
+                                        <td>
+                                        {% if s.survey_open(ID) %}
+                                        <p>Opened</p>
+                                        {%else%}
+                                        <p>Closed</p>
+                                        {%endif%}
+                                        </td>
+                                        <td>{{ s.Commit }}</td>
+                                        <td>{{ s.Course_Semester[0:8] }}</td>
+                                        <td>{{ s.Course_Semester[9:] }}</td>
+                                        <td>{{ s.Start_Time }}</td>
+                                        <td>{{ s.End_Time }}</td>
+                                        {%if current_user.authority == "STUDENT"%}
+                                        <td>
+                                                                                {%if s.survey_open() == False%}
+                                            {%if  s.State != "NOT_REVIEWED"%}
+                                                <a href = "/Public/result/{{s.Name}}">{{"Result"}} </a>
+                                            {%else%}
+                                            {{"Closed"}}
+                                            {%endif%}
+                                        {% else %}
+                                        {{"Closed"}}
+                                        {%endif%}
+                                        
+                                        </td>
+                                        {%endif%}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </br>
+            {% endfor %}
+        {% else %}
+            <h2>No surveys to show</h2>
+        {%endif%}
+    </div>
+</div>
+{% endblock %}
+
+<!--
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello， ID： {{ID}}</h1>
+</div>
+<body>
+</body>
+<div class = "container">
+    {% if surveys %}
+            {% for s in surveys %}
+                {% if s.survey_open() == False %}
+                    {{"Survey close"}}
+                {% else %}
+                <a href = "/Survey/display/{{s.Name}}">{{"Survey  Link"}} </a>
+                {% endif %}
+                <a href = "/Public/result/{{s.Name}}">{{"Survey  Result"}} </a>
+                {% if s.to_public() == False%}
+                <a href = "/Survey/publish_to_public/{{s.Name}}">{{"Publish to public"}} </a>
+                {%else%}
+                <a href = "/Survey/close_to_public/{{s.Name}}">{{"Close to public"}} </a>
+                {%endif%}
+                {{ s.Name }}  {{s.say_state()}} {{s.Course_Semester}}
+                <div class = "dropdown">
+                    <span> {{ s.Commit }}</span>
+                    <div class = "dropdown-content">
+                        <li><h5>Description: {{ s.Description_Text }}<p></li>
+                        <li><h5>State        : {{ s.State }}<p></li>
+                        <li><h5>Time         : {{ s.Start_Time }} - {{ s.End_Time }}<p></li>
+                        <li><h5>Q List        : {{ s.Question_list }}<p></li>
+                        <li><h5>OQ List      : {{ s.Optional_Question_list }}<p></li>
+                    </div>
+                </div>
+                <br>
+        {% endfor %}
+    {% else %}
+        <p>no published survey to display</p>
+    {% endif %}
+</div>
+{% endblock %}
+-->

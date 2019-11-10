@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Index{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Index page</h1>
+</div>
+<table class="table table-striped">
+     <thead>
+        <tr>
+            <th>Guest ID</th>
+            <th>E-mail</th>
+            <th>Course, semester</th>
+            <th>Operation</th>
+            <th></th>
+            </tr>
+     </thead>
+     <tbody>
+        {%for g in guest_list%}
+        <tr>
+            <th>{{g.id}} </th>
+            <th>{{g.Email}}</th>
+            <th>
+            {% for c in  g.course_semester%}
+                {{c}}
+                </br>
+            {% endfor %}
+            </th>
+            <th><a href = /guest/{{g.id}}/ADD>Allow</a></th>
+            <th><a href = /guest/{{g.id}}/DELETE>Do not allow</a></th>
+        </tr>
+        {%endfor%}
+    <tbody>
+</table>
+
+
+{% endblock %}
+

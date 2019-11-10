@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Survey Pool{% endblock %}
+
+{% block content %}
+
+<script>
+function isHidden(oDiv){
+  var vDiv = document.getElementById(oDiv);
+  vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+}
+</script>
+
+<div class = "container">
+    <div class = "page-header">
+        <h1>Survey Pool</h1>
+        <li><a href="/Survey/Create">Create New Survey</a></li>
+    </div>
+</div>
+<div class = "container">
+    <div class = "page-header">
+        {% if surveys %}
+            <h2>All surveys</h2> 
+            {% for c in cl %}
+                <div style="cursor:hand" onclick="isHidden('{{c}}')"><b>{{c}}</b></div>
+                <div style="display:block" id='{{ c }}'>
+                    <div class="table-responsive">
+                            <table class="table table-striped">
+                            
+                             <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Commit</th>
+                                    <th>Course</th>
+                                    <th>Semester</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Operation</th>
+                                    <th>Result</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                             </thead>
+                             <tbody>
+                            {% for s in surveys %}
+                                {% if s.Course_Semester == c%}
+                                    <tr>
+                                            <td>                
+                                                <div class = "dropdown">
+                                                    <span><a href = "/Survey/Review/{{s.Name}}">{{ s.Name }}</a></span>
+                                                    <div class = "dropdown-content">
+                                                        <li><h5>Description: {{ s.Description_Text }}</h5></li>
+                                                        <li><h5>Questions: {% for q in s.Question_list %} {{q.Name}} {% endfor %}</h5></li>
+                                                        <li><h5>Optional questions: {% for oq in s.Optional_Question_list %}{{oq.Name}} {% endfor %}</h5></li>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ s.say_state()}}</td>
+                                            <td>{{ s.Commit }}</td>
+                                            <td>{{ s.Course_Semester[0:8] }}</td>
+                                            <td>{{ s.Course_Semester[9:] }}</td>
+                                            <td>{{ s.Start_Time }}</td>
+                                            <td>{{ s.End_Time }}</td>
+                                        <td>
+                                            {% if s.survey_open() == False %}
+                                                <a href = "/Survey/publish_to_public/{{s.Name}}">{{"Publish to public"}} </a>
+                                            {% else %}
+                                             <!--   <a href = "/Survey/display/{{s.Name}}">Sur Link </a>
+                                                </br>-->
+                                                <a href = "/Survey/close_to_public/{{s.Name}}">{{"Close to public"}} </a>
+                                            {% endif %}
+                                        </td>
+                                        <td><a href = "/Public/result/{{s.Name}}">{{"Survey  Result"}} </a></td>
+                                        <td><a href = "/Survey/Edit/{{s.Name}}">Edit </a></td>
+                                        <td><a href = "/Survey/Delete/{{s.Name}}">Delete </a></td>
+
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </br>
+            {% endfor %}
+            <!--
+            
+            <div class="table-responsive">
+                    <table class="table table-striped">
+                    
+                     <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Commit</th>
+                            <th>Course</th>
+                            <th>Semester</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Operation</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                    {% for s in surveys %}
+                        <tr>
+                            <td>                
+                                <div class = "dropdown">
+                                    <span><a href = "/Survey/Review/{{s.Name}}">{{ s.Name }}</a></span>
+                                    <div class = "dropdown-content">
+                                        <li><h5>Description: {{ s.Description_Text }}</h5></li>
+                                        <li><h5>Questions: {% for q in s.Question_list %} {{q.Name}} {% endfor %}</h5></li>
+                                        <li><h5>Optional questions: {% for oq in s.Optional_Question_list %}{{oq.Name}} {% endfor %}</h5></li>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ s.say_state()}}</td>
+                            <td>{{ s.Commit }}</td>
+                            <td>{{ s.Course_Semester[0:8] }}</td>
+                            <td>{{ s.Course_Semester[9:] }}</td>
+                            <td>{{ s.Start_Time }}</td>
+                            <td>{{ s.End_Time }}</td>
+                        <td>
+                            {% if s.survey_open() == False %}
+                                {% if s.State == "A_CLOSED" %}
+                                    <a href = "/Public/result/{{s.Name}}">{{"Survey  Result"}} </a>
+                                {% else %}
+                                    <a href = "/Survey/publish_to_public/{{s.Name}}">{{"Publish to public"}} </a>
+                                    </br>
+                                    <p>Publish result</p>
+                                {% endif %}
+                            {% else %}
+                                <a href = "/Survey/display/{{s.Name}}">Sur Link </a>
+                                </br>
+                                <a href = "/Survey/close_to_public/{{s.Name}}">{{"Close to public"}} </a>
+                            {% endif %}
+                        </td>
+                        <td><a href = "/Survey/Edit/{{s.Name}}">Edit </a></td>
+                        <td><a href = "/Survey/Delete/{{s.Name}}">Delete </a></td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            -->
+        {% else %}
+            <h2>No surveys to show</h2>
+        {%endif%}
+    </div>
+</div>
+{% endblock %}

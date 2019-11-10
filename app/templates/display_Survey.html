@@ -1,0 +1,29 @@
+{% extends "base_student.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Display Survey{% endblock %}
+
+{% block page_content %}
+
+
+
+{% if form and survey %}
+    <div class="jumbotron">
+<h1>{{survey.Name}}</h1>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Description
+    </div>
+    <div class="panel-body">
+        {{survey.Description_Text}}
+    </div>
+
+</div>
+<h3>Questions</h3>
+{{ wtf.quick_form(form) }}
+</div>
+{%else%}
+    <h1>{{text}}</h1>
+{% endif %}
+{% endblock %}

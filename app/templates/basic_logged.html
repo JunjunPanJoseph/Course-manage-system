@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Login{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Login page</h1>
+</div>
+<body>
+    <form method = "POST">
+    <h1> You made it in!</h1>
+    <a type = "submit" href = "{{url_for('logout')}}">Logout</a>
+    </form>
+</body>
+{% endblock %}

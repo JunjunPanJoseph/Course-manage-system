@@ -1,0 +1,26 @@
+{% extends "base_LOGIN.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Login{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Login</h1>
+</div>
+<body>
+    <form method = "POST">
+        <p class = "lead">User ID: </p>
+        <input placeholder = "Enter your id" name = "id"  required="required" class="form-control"/>
+        <br>
+        <p class = "lead">Password: </p>
+        <input placeholder = "Enter your password" name = "password" type = "password" required="required" class="form-control"/>
+        <button type = "submit" class = "btn btn-default">Login</button>
+    </form>
+    {%if success%}
+        <p>{{success}}</p>
+    {% endif %}
+</body>
+<div>
+<h3><a href = "/Register">Register Guest User link</a></h3>
+</div>
+{% endblock %}

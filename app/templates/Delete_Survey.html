@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Delete Survey{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <li><a href="/Survey_Pool">Back</a></li>
+</div>
+
+
+
+{% if form %}
+<h1>Delete Survey  {{ name }}</h1>
+<h2>Are you sure you want to delete Survey: {{ name }}?</h2>
+{{ wtf.quick_form(form) }}
+{%else%}
+    <h1>Can not find Survey in Survey pool!</h1>
+{% endif %}
+{% endblock %}

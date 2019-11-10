@@ -1,0 +1,82 @@
+{% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+
+{% if current_user.authority == "STAFF" %}
+{% extends "base_staff.html" %}
+{% else %}
+{% extends "base.html" %}
+{% endif %}
+
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Create Question{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Create Question</h1>
+    <li><a href="/Question_Pool">Back</a></li>
+</div>
+<!--
+<div>
+    Question:</title><br>
+    <input type="text" name ="question"><br><br>
+
+    Number of Answers:
+    <select required>
+      <option value="one">1</option>
+      <option value="one">2</option>
+      <option value="one">3</option>
+      <option value="one">4</option>
+      <option value="one">5</option>
+    </select><br><br>
+
+    Answers:<br>
+    <textarea name ="choices" rows="4" cols="50">
+Separate answers with a ';'
+    </textarea><br><br>
+    <input type="submit" value="Submit">
+</div>
+-->
+
+<form class = "form form-horizontal" method= "POST" role="form">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="True") }}
+    {{ wtf.form_field(form.name) }}
+    {{ wtf.form_field(form.commit) }}
+    {{ wtf.form_field(form.question_text) }}
+    <div onclick = "onClick()">
+    {{ wtf.form_field(form.type) }}
+    </div>
+    <div id="question_list_text">
+        {{ wtf.form_field(form.choices) }}
+    </div>
+    <br>
+    {{ wtf.form_field(form.submit) }}
+</form>
+<script>
+document.write(obj[0]);
+function onClick(){
+var radio = document.getElementsByName("type");
+    if(radio[2].checked){
+        document.getElementById("question_list_text").style.display="none";
+    } else {
+        document.getElementById("question_list_text").style.display="inline";
+    }
+}
+</script>
+
+<!--
+{{ wtf.quick_form(form) }}
+-->
+{% endblock %}

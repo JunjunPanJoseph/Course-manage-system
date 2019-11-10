@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Create Question{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <li><a href="/Question_Pool">Back</a></li>
+</div>
+
+
+
+{% if form %}
+<h1>Edit Question{{ form.name.data }}</h1>
+<form class = "form form-horizontal" method= "POST" role="form">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="True") }}
+    {{ wtf.form_field(form.name) }}
+    {{ wtf.form_field(form.commit) }}
+    {{ wtf.form_field(form.question_text) }}
+    <div onclick = "onClick()">
+    {{ wtf.form_field(form.type) }}
+    </div>
+    <div id="question_list_text">
+        {{ wtf.form_field(form.choices) }}
+    </div>
+    <br>
+    {{ wtf.form_field(form.submit) }}
+</form>
+
+{% if form.type.data=="TEXT"%}
+<script>document.getElementById("question_list_text").style.display="none";</script>
+{% endif %}
+
+<script>
+function onClick(){
+var radio = document.getElementsByName("type");
+    if(radio[2].checked){
+        document.getElementById("question_list_text").style.display="none";
+    } else {
+        document.getElementById("question_list_text").style.display="inline";
+    }
+}
+</script>
+{%else%}
+    <h1>Can not find question in question pool!</h1>
+{% endif %}
+{% endblock %}

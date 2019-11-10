@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+<div class = "container">
+    <div class = "page-header">
+        <h1>Course List</h1>
+    </div>
+</div>
+<div class = "container">
+{%if course_list%}
+<table class="table table-striped">
+     <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Semester</th>
+            </tr>
+     </thead>
+     <tbody>
+        {%for x in course_list %}
+        <tr>
+            <th>{{x[0]}} </th>
+            <th>{{x[1]}}</th>
+        </tr>
+        {%endfor%}
+    <tbody>
+</table>
+{%else%}
+<h2>no current course to show</h2>
+{%endif%}
+</div>
+{% endblock %}

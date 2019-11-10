@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{{ survey_name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ survey_name }}</h1>
+</div>
+<h3>Author: {{ survey_author }}</h3>
+<br>
+<br>
+<h4>{{ survey_description }}</h4>
+<br>
+{{ wtf.quick_form(form) }}
+{% endblock %}
+

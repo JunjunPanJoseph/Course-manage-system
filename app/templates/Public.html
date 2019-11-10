@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Published Survey{% endblock %}
+
+{% block content %}
+<div class = "container">
+    <div class = "page-header">
+        <h1>Publish Page</h1>
+    </div>
+</div>
+<div class = "container">
+    {% if surveys %}
+            {% for s in surveys %}
+                {% if s.survey_open() == False %}
+                    {{"Survey close"}}
+                {% else %}
+                <a href = "/Survey/display/{{s.Name}}">{{"Survey  Link"}} </a>
+                {% endif %}
+                <a href = "/Public/result/{{s.Name}}">{{"Survey  Result"}} </a>
+                {% if s.to_public() == False%}
+                <a href = "/Survey/publish_to_public/{{s.Name}}">{{"Publish to public"}} </a>
+                {%else%}
+                <a href = "/Survey/close_to_public/{{s.Name}}">{{"Close to public"}} </a>
+                {%endif%}
+                {{ s.Name }}  {{s.say_state()}} {{s.Course_Semester}}
+                <div class = "dropdown">
+                    <span> {{ s.Commit }}</span>
+                    <div class = "dropdown-content">
+                        <li><h5>Description: {{ s.Description_Text }}<p></li>
+                        <li><h5>State        : {{ s.State }}<p></li>
+                        <li><h5>Time         : {{ s.Start_Time }} - {{ s.End_Time }}<p></li>
+                        <li><h5>Q List        : {{ s.Question_list }}<p></li>
+                        <li><h5>OQ List      : {{ s.Optional_Question_list }}<p></li>
+                    </div>
+                </div>
+                <br>
+        {% endfor %}
+    {% else %}
+        <p>no published survey to display</p>
+    {% endif %}
+</div>
+{% endblock %}
